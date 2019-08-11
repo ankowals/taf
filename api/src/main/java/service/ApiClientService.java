@@ -21,4 +21,12 @@ public class ApiClientService {
                         .setBaseUri(baseUrl)));
     }
 
+    public ApiClient getApiClientWithoutValidationFilter(String baseUrl){
+        return ApiClient.api(ApiClient.Config.apiConfig().reqSpecSupplier(
+                () -> new RequestSpecBuilder().setConfig(config().objectMapperConfig(objectMapperConfig().defaultObjectMapper(gson())))
+                        .addFilter(new RequestLoggingFilter())
+                        .addFilter(new ResponseLoggingFilter())
+                        .setBaseUri(baseUrl)));
+    }
+
 }

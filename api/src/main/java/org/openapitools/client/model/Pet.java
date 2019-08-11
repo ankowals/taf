@@ -25,6 +25,8 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.Builder;
 import org.openapitools.client.model.Category;
 import org.openapitools.client.model.Tag;
 

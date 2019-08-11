@@ -2,7 +2,6 @@ package base;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.io.IoBuilder;
 import org.apache.logging.log4j.status.StatusLogger;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
@@ -10,7 +9,6 @@ import org.testng.annotations.Listeners;
 
 @Listeners(BaseListener.class)
 public class BaseTest extends AbstractTestNGSpringContextTests {
-    Logger logger = LogManager.getLogger();
 
     //a class initializer used to initialize logger.
     static {

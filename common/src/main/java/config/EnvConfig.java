@@ -1,5 +1,6 @@
 package config;
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -10,6 +11,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 @Configuration
 @ComponentScan(basePackages = { "config" })
 @PropertySource("classpath:env.properties")
+@Getter
 public class EnvConfig {
 
     @Value("${db.url}")
@@ -27,15 +29,4 @@ public class EnvConfig {
         return new PropertySourcesPlaceholderConfigurer();
     }
 
-    public String getDbUrl() {
-        return dbUrl;
-    }
-
-    public int getAppPort() {
-        return appPort;
-    }
-
-    public String getWebUrl() {
-        return webUrl;
-    }
 }
