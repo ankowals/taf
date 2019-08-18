@@ -4,6 +4,7 @@ import base.ApiBaseTest;
 import data.TestDataFactory;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
+import io.restassured.http.ContentType;
 import lombok.extern.log4j.Log4j2;
 import org.jeasy.random.EasyRandom;
 import org.jeasy.random.EasyRandomParameters;
@@ -34,11 +35,11 @@ public class ApiTest extends ApiBaseTest {
     public void thirdTest(){
         log.debug("thirdTest");
 
-        String baseUrl = config.getWebUrl();
+        String baseUrl = environmentConfig.webUrl();
 
         given().filter(new RequestLoggingFilter()).filter(new ResponseLoggingFilter()).
                 when().
-                get(baseUrl + "/pet/findByStatus?status=available").
+                get(baseUrl + "/pet/findByStatus?status=sold").
                 then().
                 assertThat().
                 statusCode(200);

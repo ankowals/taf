@@ -1,12 +1,9 @@
 package base;
 
-import config.EnvConfig;
 import config.IoCRestConfig;
 import lombok.extern.log4j.Log4j2;
 import org.openapitools.client.ApiClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.testng.ITestContext;
 import org.testng.annotations.AfterMethod;
@@ -21,7 +18,6 @@ import java.lang.reflect.Method;
 @ContextConfiguration(classes={IoCRestConfig.class})
 public class ApiBaseTest extends BaseTest {
 
-    protected EnvConfig config;
     protected ApiClient apiClient;
 
     @Autowired
@@ -29,24 +25,22 @@ public class ApiBaseTest extends BaseTest {
 
     @BeforeSuite
     public void beforeSuite(ITestContext testContext){
-        log.debug("SUITE " + testContext.getSuite().getName() +  " STARTED");
-        ApplicationContext ctx = new AnnotationConfigApplicationContext(EnvConfig.class);
-        config = ctx.getBean(EnvConfig.class);
+        log.info("SUITE " + testContext.getSuite().getName() +  " STARTED");
     }
 
     @BeforeMethod
     public void beforeMethod(Method method){
-        log.debug("TEST " + method.getName() + " STARTED");
-        apiClient = apiClientService.getApiClient(config.getWebUrl());
+        log.info("TEST " + method.getName() + " STARTED");
+        apiClient = apiClientService.getApiClient(environmentConfig.webUrl());
     }
 
     @AfterMethod
     public void afterMethod(Method method){
-        log.debug("TEST " + method.getName() + " ENDED");
+        log.info("TEST " + method.getName() + " ENDED");
     }
 
     @AfterSuite
     public void afterSuite(ITestContext testContext) {
-        log.debug("SUITE " + testContext.getSuite().getName() +  " ENDED");
+        log.info("SUITE " + testContext.getSuite().getName() +  " ENDED");
     }
 }

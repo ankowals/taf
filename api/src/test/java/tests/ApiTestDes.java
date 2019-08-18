@@ -21,7 +21,7 @@ public class ApiTestDes extends ApiBaseTest {
     @BeforeMethod
     public void beforeMethod(Method method){
         log.debug("TEST " + method.getName() + " STARTED");
-        apiClient = apiClientService.getApiClientWithoutValidationFilter(config.getWebUrl());
+        apiClient = apiClientService.getApiClientWithoutValidationFilter(environmentConfig.webUrl());
     }
 
     @Test

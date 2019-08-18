@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.saf.testautomation</groupId>
+    <groupId>taf.testautomation</groupId>
     <artifactId>testautomation</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
@@ -13,6 +13,10 @@
         <module>common</module>
         <module>web</module>
     </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.testng/testng -->
@@ -34,6 +38,12 @@
             <artifactId>log4j-iostreams</artifactId>
             <version>2.12.0</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>2.12.0</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/io.qameta.allure/allure-testng -->
         <dependency>
             <groupId>io.qameta.allure</groupId>
@@ -51,6 +61,11 @@
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
+            <version>3.141.59</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-remote-driver</artifactId>
             <version>3.141.59</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.codeborne/selenide -->
@@ -89,6 +104,12 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>5.1.9.RELEASE</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.aeonbits.owner/owner -->
+        <dependency>
+            <groupId>org.aeonbits.owner</groupId>
+            <artifactId>owner</artifactId>
+            <version>1.0.10</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
@@ -133,7 +154,26 @@
             <groupId>org.awaitility</groupId>
             <artifactId>awaitility</artifactId>
             <version>3.1.6</version>
-            <scope>test</scope>
+            <!--<scope>test</scope>-->
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.testcontainers/testcontainers -->
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <version>1.12.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.testcontainers/oracle-xe -->
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>oracle-xe</artifactId>
+            <version>1.12.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.testcontainers/selenium -->
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>selenium</artifactId>
+            <version>1.12.0</version>
+            <!--<scope>test</scope>-->
         </dependency>
         <!-- swagger support -->
         <dependency>
@@ -168,49 +208,7 @@
         </dependency>
     </dependencies>
 
-    <profiles>
-        <profile>
-            <id>dev1</id>
-            <activation>
-                <!-- this profile is active by default -->
-                <activeByDefault>true</activeByDefault>
-                <!-- activate if system properties 'env=dev1' -->
-                <property>
-                    <name>env</name>
-                    <value>dev1</value>
-                </property>
-            </activation>
-            <properties>
-                <db.url>jdbc:mysql://localhost:1111/dev1</db.url>
-                <web.url>https://petstore.swagger.io/v2</web.url>
-                <app.port>1234</app.port>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>dev2</id>
-            <activation>
-                <!-- activate if system properties 'env=dev2' -->
-                <property>
-                    <name>env</name>
-                    <value>dev2</value>
-                </property>
-            </activation>
-            <properties>
-                <db.url>jdbc:mysql://localhost:2222/dev2</db.url>
-                <web.url>http://www.google.com</web.url>
-                <app.port>5678</app.port>
-            </properties>
-        </profile>
-    </profiles>
-
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
 
         <plugins>
             <plugin>
@@ -235,6 +233,7 @@
                     </argLine>
                     <systemPropertyVariables>
                         <allure.results.directory>target/allure-results</allure.results.directory>
+                        <active.environment>dev1</active.environment>
                     </systemPropertyVariables>
                 </configuration>
                 <dependencies>
@@ -244,17 +243,6 @@
                         <version>1.9.4</version>
                     </dependency>
                 </dependencies>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.1.0</version>
-                <configuration>
-                    <nonFilteredFileExtensions>
-                        <nonFilteredFileExtension>exe</nonFilteredFileExtension>
-                    </nonFilteredFileExtensions>
-                </configuration>
             </plugin>
 
         </plugins>

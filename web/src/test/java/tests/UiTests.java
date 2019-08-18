@@ -31,6 +31,26 @@ public class UiTests extends UiBaseTest {
     }
 
     @Test
+    public void userCantSearch(){
+        open("https://google.com/ncr");
+        new GooglePage().searchFor("selenide");
+
+        SearchResultsPage results = new SearchResultsPage();
+        results.getResults().shouldHave(sizeGreaterThan(1));
+        results.getResult(0).shouldHave(text("That is not what i would expect"));
+    }
+
+    @Test
+    public void userCantSearchTheSecond(){
+        open("https://google.com/ncr");
+        new GooglePage().searchFor("failing selenide test");
+
+        SearchResultsPage results = new SearchResultsPage();
+        results.getResults().shouldHave(sizeGreaterThan(1));
+        results.getResult(0).shouldHave(text("a dummy text"));
+    }
+
+    @Test
     public void checkRandomDataGeneration(){
         String randomString = length(10).with(spaces()).english();
         int randomInt = between(0, 100).integer();
