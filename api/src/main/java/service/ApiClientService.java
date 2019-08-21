@@ -12,12 +12,12 @@ import static org.openapitools.client.GsonObjectMapper.gson;
 
 public class ApiClientService {
 
-    public ApiClient getApiClient(String baseUrl){
+    public ApiClient getApiClient(String baseUrl, String specUrl){
         return ApiClient.api(ApiClient.Config.apiConfig().reqSpecSupplier(
                 () -> new RequestSpecBuilder().setConfig(config().objectMapperConfig(objectMapperConfig().defaultObjectMapper(gson())))
                         .addFilter(new RequestLoggingFilter())
                         .addFilter(new ResponseLoggingFilter())
-                        .addFilter(new OpenApiValidationFilter(baseUrl + "/swagger.json"))
+                        .addFilter(new OpenApiValidationFilter(specUrl))
                         .setBaseUri(baseUrl)));
     }
 

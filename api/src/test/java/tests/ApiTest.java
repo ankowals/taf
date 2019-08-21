@@ -4,14 +4,15 @@ import base.ApiBaseTest;
 import data.TestDataFactory;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
-import io.restassured.http.ContentType;
 import lombok.extern.log4j.Log4j2;
 import org.jeasy.random.EasyRandom;
 import org.jeasy.random.EasyRandomParameters;
 import org.openapitools.client.model.Category;
 import org.openapitools.client.model.Pet;
+import org.openapitools.client.model.Tag;
 import org.testng.annotations.Test;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static io.qala.datagen.RandomValue.between;
 import static io.restassured.RestAssured.given;
 import static org.jeasy.random.FieldPredicates.*;
@@ -35,20 +36,65 @@ public class ApiTest extends ApiBaseTest {
     public void thirdTest(){
         log.debug("thirdTest");
 
-        String baseUrl = environmentConfig.webUrl();
+        //setup mock
+        String mockResponseBody = "[\n" +
+                "  {\n" +
+                "    \"id\": -973,\n" +
+                "    \"category\": {\n" +
+                "      \"id\": 45,\n" +
+                "      \"name\": \"eue65U6Fqr4ET9y_\"\n" +
+                "    },\n" +
+                "    \"name\": \"doggie\",\n" +
+                "    \"photoUrls\": [\n" +
+                "      \"A81KwZjxEbWpNmxV\"\n" +
+                "    ],\n" +
+                "    \"tags\": [\n" +
+                "      {\n" +
+                "        \"id\": -771,\n" +
+                "        \"name\": \"XF2QMoSVOFrMLmLZ\"\n" +
+                "      }\n" +
+                "    ],\n" +
+                "    \"status\": \"sold\"\n" +
+                "  }]";
 
-        given().filter(new RequestLoggingFilter()).filter(new ResponseLoggingFilter()).
-                when().
-                get(baseUrl + "/pet/findByStatus?status=sold").
-                then().
-                assertThat().
-                statusCode(200);
+        mockServer.stubFor(get(urlEqualTo("/pet/findByStatus?status=sold"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(mockResponseBody)));
+
+        String baseUrl = "http://localhost:" + mockServer.port();
+
+        given().filter(new RequestLoggingFilter())
+                .filter(new ResponseLoggingFilter())
+                .when()
+                .get(baseUrl + "/pet/findByStatus?status=sold")
+                .then()
+                .assertThat()
+                .statusCode(200);
     }
 
     @Test
     public void fourthTest(){
         log.debug("fourthTest");
-        apiClient.pet().addPet();
+
+        //setup mock
+        String mockResponseBody = "{\n" +
+                "  \"id\": 9199424981609321000,\n" +
+                "  \"category\": {\n" +
+                "    \"id\": 1,\n" +
+                "    \"name\": \"dog\"\n" +
+                "  },\n" +
+                "  \"name\": \"Lena\",\n" +
+                "  \"photoUrls\": [],\n" +
+                "  \"tags\": []\n" +
+                "}";
+
+        mockServer.stubFor(post(urlEqualTo("/pet"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(mockResponseBody)));
 
         Pet pet = new Pet();
         pet.category(new Category().name("dog")).name("Lena").id(1l);
@@ -72,6 +118,24 @@ public class ApiTest extends ApiBaseTest {
                 .category(dogCategoy)
                 .build();
 
+        //setup mock
+        String mockResponseBody = "{\n" +
+                "  \"id\": " + dog.getId() + ",\n" +
+                "  \"category\": {\n" +
+                "    \"id\": " + dogCategoy.getId() + ",\n" +
+                "    \"name\": \"dog\"\n" +
+                "  },\n" +
+                "  \"name\": \"Lena\",\n" +
+                "  \"photoUrls\": [],\n" +
+                "  \"tags\": []\n" +
+                "}";
+
+        mockServer.stubFor(post(urlEqualTo("/pet"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(mockResponseBody)));
+
         apiClient.pet()
                 .addPet()
                 .body(dog)
@@ -90,6 +154,39 @@ public class ApiTest extends ApiBaseTest {
         EasyRandom easyRandom = new EasyRandom(parameters);
 
         Pet randomPet = easyRandom.nextObject(Pet.class);
+
+        StringBuilder sb = new StringBuilder();
+        for (Tag tag: randomPet.getTags()){
+            sb.append( "{\n" )
+              .append( "\"id\": \"" + tag.getId() + "\",\n" )
+              .append( "\"name\": \"" + tag.getName() + "\"\n" )
+              .append( "},\n" );
+        }
+        sb.deleteCharAt(sb.length()-2); //remove last comma from the list
+        String sTags = sb.toString();
+
+        //setup mock
+        String mockResponseBody = "{\n" +
+                "  \"id\": " + randomPet.getId() + ",\n" +
+                "  \"category\": {\n" +
+                "    \"id\": " + randomPet.getCategory().getId() + ",\n" +
+                "    \"name\": \"dog\"\n" +
+                "  },\n" +
+                "  \"name\": \"Lena\",\n" +
+                "  \"photoUrls\": [\n" +
+                "    \"A81KwZjxEbWpNmxV\"\n" +
+                "  ],\n" +
+                "  \"tags\": [\n" +
+                sTags +
+                "  ],\n" +
+                " \"status\": \"" + randomPet.getStatus().getValue() + "\"\n" +
+                "}";
+
+        mockServer.stubFor(post(urlEqualTo("/pet"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(mockResponseBody)));
 
         apiClient.pet()
                 .addPet()

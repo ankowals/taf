@@ -1,5 +1,6 @@
 package base;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
 import config.IoCRestConfig;
 import lombok.extern.log4j.Log4j2;
 import org.openapitools.client.ApiClient;
@@ -23,20 +24,25 @@ public class ApiBaseTest extends BaseTest {
     @Autowired
     ApiClientService apiClientService;
 
+    @Autowired
+    protected WireMockServer mockServer;
+
     @BeforeSuite
     public void beforeSuite(ITestContext testContext){
         log.info("SUITE " + testContext.getSuite().getName() +  " STARTED");
     }
 
     @BeforeMethod
-    public void beforeMethod(Method method){
+    public void beforeMethod(Method method) {
         log.info("TEST " + method.getName() + " STARTED");
-        apiClient = apiClientService.getApiClient(environmentConfig.webUrl());
+        mockServer.start();
+        apiClient = apiClientService.getApiClient("http://localhost:" + mockServer.port(), environmentConfig.webUrl() + "/swagger.json");
     }
 
     @AfterMethod
     public void afterMethod(Method method){
         log.info("TEST " + method.getName() + " ENDED");
+        mockServer.stop();
     }
 
     @AfterSuite
