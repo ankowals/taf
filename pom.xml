@@ -44,6 +44,19 @@
             <artifactId>log4j-slf4j-impl</artifactId>
             <version>2.12.0</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-jul -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-jul</artifactId>
+            <version>2.12.0</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-jcl -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-jcl</artifactId>
+            <version>2.12.0</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/io.qameta.allure/allure-testng -->
         <dependency>
             <groupId>io.qameta.allure</groupId>
@@ -239,8 +252,10 @@
                         -javaagent:${settings.localRepository}/org/aspectj/aspectjweaver/1.9.4/aspectjweaver-1.9.4.jar
                     </argLine>
                     <systemPropertyVariables>
-                        <allure.results.directory>target/allure-results</allure.results.directory>
                         <active.environment>dev1</active.environment>
+                        <allure.results.directory>target/allure-results</allure.results.directory>
+                        <java.util.logging.manager>org.apache.logging.log4j.jul.LogManager</java.util.logging.manager>
+                        <selenide.reportsFolder>target/selenide-reports</selenide.reportsFolder>
                     </systemPropertyVariables>
                 </configuration>
                 <dependencies>

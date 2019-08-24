@@ -1,7 +1,7 @@
 package base;
 
 
-import browser.BrowserCuztomization;
+import browser.BrowserCustomization;
 import browser.GridCustomization;
 import config.IoCRestConfig;
 import config.IoCWebConfig;
@@ -14,6 +14,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.containers.BrowserWebDriverContainer;
 import org.testcontainers.lifecycle.TestDescription;
@@ -35,11 +36,12 @@ import static com.codeborne.selenide.WebDriverRunner.setWebDriver;
 @ContextConfiguration(classes={IoCRestConfig.class, IoCWebConfig.class})
 public class UiBaseTest extends BaseTest {
 
+    @Lazy
     @Autowired
-    BrowserWebDriverContainer chrome;
+    BrowserWebDriverContainer chromeContainer;
 
     @Autowired
-    BrowserCuztomization browserCustomization;
+    BrowserCustomization browserCustomization;
 
     private static String url;
 
@@ -77,8 +79,8 @@ public class UiBaseTest extends BaseTest {
         }
         if (environmentConfig.chromeDriverUseTestContainers() && environmentConfig.chromeDriverNumberOfNodes() == 0) {
             log.info("Starting web driver in test container");
-            chrome.start();
-            setWebDriver(chrome.getWebDriver());
+            chromeContainer.start();
+            setWebDriver(chromeContainer.getWebDriver());
         }
 
         if (environmentConfig.chromeDriverUseTestContainers() && environmentConfig.chromeDriverNumberOfNodes() > 0) {
@@ -106,11 +108,11 @@ public class UiBaseTest extends BaseTest {
                 }
             };
 
-            chrome.afterTest(description, Optional.of(result)
+            chromeContainer.afterTest(description, Optional.of(result)
                     .filter(r -> !r.isSuccess())
                     .map(__ -> new RuntimeException()));
 
-            chrome.stop();
+            chromeContainer.stop();
         }
 
         if (environmentConfig.chromeDriverUseTestContainers() && environmentConfig.chromeDriverNumberOfNodes() > 0) {

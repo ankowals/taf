@@ -36,7 +36,7 @@ public class ApiBaseTest extends BaseTest {
     public void beforeMethod(Method method) {
         log.info("TEST " + method.getName() + " STARTED");
         mockServer.start();
-        apiClient = apiClientService.getApiClient("http://localhost:" + mockServer.port(), environmentConfig.webUrl() + "/swagger.json");
+        apiClient = apiClientService.getApiClient(environmentConfig.webUrl() + ":" + mockServer.port(), "https://petstore.swagger.io/v2/swagger.json");
     }
 
     @AfterMethod

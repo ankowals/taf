@@ -1,11 +1,10 @@
 package config;
 
-import browser.BrowserCuztomization;
+import browser.BrowserCustomization;
 import browser.GridCustomization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.testcontainers.containers.BrowserWebDriverContainer;
-import org.testcontainers.containers.wait.strategy.Wait;
 
 import java.io.File;
 
@@ -16,7 +15,7 @@ import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordi
 public class IoCWebConfig {
 
     @Autowired
-    BrowserCuztomization browserCustomization;
+    BrowserCustomization browserCustomization;
 
     @Lazy
     @Bean

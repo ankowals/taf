@@ -63,7 +63,8 @@ public class ApiTest extends ApiBaseTest {
                         .withHeader("Content-Type", "application/json")
                         .withBody(mockResponseBody)));
 
-        String baseUrl = "http://localhost:" + mockServer.port();
+
+        String baseUrl = environmentConfig.webUrl() + ":" + mockServer.port();
 
         given().filter(new RequestLoggingFilter())
                 .filter(new ResponseLoggingFilter())
