@@ -3,6 +3,7 @@ package base;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import config.IoCRestConfig;
 import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.ThreadContext;
 import org.openapitools.client.ApiClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -34,6 +35,10 @@ public class ApiBaseTest extends BaseTest {
 
     @BeforeMethod
     public void beforeMethod(Method method) {
+        //pass log dir name and log file name to the Log4j2 context
+        ThreadContext.put("logFileName", method.getName() + "_" + System.nanoTime() + "_" + Thread.currentThread().getId());
+        ThreadContext.put("logDirName", method.getName());
+
         log.info("TEST " + method.getName() + " STARTED");
         mockServer.start();
         apiClient = apiClientService.getApiClient(environmentConfig.webUrl() + ":" + mockServer.port(), "https://petstore.swagger.io/v2/swagger.json");
@@ -42,6 +47,7 @@ public class ApiBaseTest extends BaseTest {
     @AfterMethod
     public void afterMethod(Method method){
         log.info("TEST " + method.getName() + " ENDED");
+        attachLogToReport();
         mockServer.stop();
     }
 

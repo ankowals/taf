@@ -1,22 +1,21 @@
 package base;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-public class BaseListener implements ITestListener {
-    private final Logger LOGGER = LogManager.getLogger(this.getClass());
+@Log4j2
+public class BaseTestListener implements ITestListener {
 
     private void printException(ITestResult results){
         if (results != null && results.getThrowable() != null) {
             StringWriter sw = new StringWriter();
             results.getThrowable().printStackTrace(new PrintWriter(sw));
             String stacktrace = sw.toString();
-            LOGGER.error(stacktrace);
+            log.error(stacktrace);
         }
     }
 

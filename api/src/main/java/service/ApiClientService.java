@@ -1,6 +1,7 @@
 package service;
 
 import com.atlassian.oai.validator.restassured.OpenApiValidationFilter;
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
@@ -18,6 +19,7 @@ public class ApiClientService {
                         .addFilter(new RequestLoggingFilter())
                         .addFilter(new ResponseLoggingFilter())
                         .addFilter(new OpenApiValidationFilter(specUrl))
+                        .addFilter(new AllureRestAssured())
                         .setBaseUri(baseUrl)));
     }
 
@@ -26,6 +28,7 @@ public class ApiClientService {
                 () -> new RequestSpecBuilder().setConfig(config().objectMapperConfig(objectMapperConfig().defaultObjectMapper(gson())))
                         .addFilter(new RequestLoggingFilter())
                         .addFilter(new ResponseLoggingFilter())
+                        .addFilter(new AllureRestAssured())
                         .setBaseUri(baseUrl)));
     }
 

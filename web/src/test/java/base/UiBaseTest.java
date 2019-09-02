@@ -3,9 +3,12 @@ package base;
 
 import browser.BrowserCustomization;
 import browser.GridCustomization;
+import com.codeborne.selenide.logevents.SelenideLogger;
 import config.IoCRestConfig;
 import config.IoCWebConfig;
+import io.qameta.allure.selenide.AllureSelenide;
 import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.ThreadContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -70,6 +73,13 @@ public class UiBaseTest extends BaseTest {
 
     @BeforeMethod
     public void beforeMethod(Method method) throws MalformedURLException {
+        //pass log dir name and log file name to the Log4j2 context
+        ThreadContext.put("logFileName", method.getName() + "_" + System.nanoTime() + "_" + Thread.currentThread().getId());
+        ThreadContext.put("logDirName", method.getName());
+
+        //allure - selenide integration
+        SelenideLogger.addListener("AllureSelenide", new AllureSelenide().screenshots(true).savePageSource(false));
+
         log.info("TEST " + method.getName() + " STARTED");
         if (!environmentConfig.chromeDriverUseTestContainers()){
             log.info("Starting web driver");
@@ -95,6 +105,7 @@ public class UiBaseTest extends BaseTest {
     @AfterMethod
     public void afterMethod(Method method, ITestResult result){
         log.info("TEST " + method.getName() + " ENDED");
+        attachLogToReport();
         if (environmentConfig.chromeDriverUseTestContainers() && environmentConfig.chromeDriverNumberOfNodes() == 0) {
             TestDescription description = new TestDescription() {
                 @Override

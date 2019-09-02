@@ -13,10 +13,11 @@
 
 package org.openapitools.client;
 
-import org.openapitools.client.api.*;
-
 import io.restassured.builder.RequestSpecBuilder;
-import java.util.function.Consumer;
+import org.openapitools.client.api.PetApi;
+import org.openapitools.client.api.StoreApi;
+import org.openapitools.client.api.UserApi;
+
 import java.util.function.Supplier;
 
 import static io.restassured.config.ObjectMapperConfig.objectMapperConfig;

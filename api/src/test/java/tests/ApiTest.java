@@ -15,7 +15,8 @@ import org.testng.annotations.Test;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static io.qala.datagen.RandomValue.between;
 import static io.restassured.RestAssured.given;
-import static org.jeasy.random.FieldPredicates.*;
+import static org.jeasy.random.FieldPredicates.inClass;
+import static org.jeasy.random.FieldPredicates.named;
 
 @Log4j2
 public class ApiTest extends ApiBaseTest {

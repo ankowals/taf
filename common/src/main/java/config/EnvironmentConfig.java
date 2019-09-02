@@ -1,11 +1,12 @@
 package config;
 
+import org.aeonbits.owner.Accessible;
 import org.aeonbits.owner.Config;
 
 @Config.LoadPolicy(Config.LoadType.MERGE)
 @Config.Sources({ "classpath:env.${active.environment}.properties",
                   "classpath:selenium.properties"})
-public interface EnvironmentConfig extends Config {
+public interface EnvironmentConfig extends Accessible {
 
     @Key("db.url")
     String dbUrl();

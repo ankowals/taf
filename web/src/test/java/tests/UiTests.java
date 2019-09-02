@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.open;
-import static io.qala.datagen.RandomDate.*;
+import static io.qala.datagen.RandomDate.beforeNow;
 import static io.qala.datagen.RandomValue.between;
 import static io.qala.datagen.RandomValue.length;
 import static io.qala.datagen.StringModifier.Impls.spaces;

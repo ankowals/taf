@@ -14,25 +14,21 @@
 package org.openapitools.client.api;
 
 import com.google.gson.reflect.TypeToken;
-import org.openapitools.client.model.Order;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import org.openapitools.client.model.Order;
 
 import java.lang.reflect.Type;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
-import org.openapitools.client.JSON;
 
 import static io.restassured.http.Method.*;
 
