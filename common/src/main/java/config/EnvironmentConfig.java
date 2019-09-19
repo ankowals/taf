@@ -2,7 +2,9 @@ package config;
 
 import org.aeonbits.owner.Accessible;
 import org.aeonbits.owner.Config;
+import util.CryptoUtil;
 
+@Config.DecryptorClass( CryptoUtil.class )
 @Config.LoadPolicy(Config.LoadType.MERGE)
 @Config.Sources({ "classpath:env.${active.environment}.properties",
                   "classpath:selenium.properties"})
@@ -25,5 +27,9 @@ public interface EnvironmentConfig extends Accessible {
 
     @Key("chrome.driver.testContainers.numberOfNodes")
     int chromeDriverNumberOfNodes();
+
+    @EncryptedValue
+    @Key("db.pass")
+    String dbPass();
 
 }

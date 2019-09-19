@@ -15,6 +15,7 @@ import org.testng.annotations.Test;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static io.qala.datagen.RandomValue.between;
 import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.jeasy.random.FieldPredicates.inClass;
 import static org.jeasy.random.FieldPredicates.named;
 
@@ -194,6 +195,15 @@ public class ApiTest extends ApiBaseTest {
                 .addPet()
                 .body(randomPet)
                 .execute(r -> r.prettyPeek());
+    }
+
+    @Test
+    public void seventhTest() {
+        log.debug("seventhTest");
+
+        String pass = environmentConfig.dbPass();
+        log.debug("Decrypted password is " + pass);
+        assertThat(pass).isEqualTo("oracle");
     }
 
 }
